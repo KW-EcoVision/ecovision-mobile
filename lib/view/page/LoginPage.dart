@@ -1,3 +1,4 @@
+import 'package:eco_vision/view/const/EcoVisionColor.dart';
 import 'package:eco_vision/view/page/SignupPage.dart';
 import 'package:eco_vision/view/widget/EcoTextField.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +25,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(fontSize: 40),
               ),
             ),
-            Center(
-                child: Column(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 EcoTextField(
@@ -33,6 +33,8 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: 'ID',
                     width: MediaQuery.of(context).size.width - 32,
                     height: MediaQuery.of(context).size.height / 10,
+                    enabledBorderColor: Colors.white,
+                    focusedBorderColor: EcoVisionColor.neonGreen,
                     radius: 10,
                     isPassword: false),
                 SizedBox(
@@ -43,6 +45,8 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: 'Password',
                     width: MediaQuery.of(context).size.width - 32,
                     height: MediaQuery.of(context).size.height / 10,
+                    enabledBorderColor: Colors.white,
+                    focusedBorderColor: EcoVisionColor.neonGreen,
                     radius: 10,
                     isPassword: true),
                 // SizedBox(
@@ -67,11 +71,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ],
-            )),
+            ),
             Center(
                 child: TextButton(
                     onPressed: () {},
-                    child: Text(
+                    child: const Text(
                       'Login',
                       style: TextStyle(fontSize: 15),
                     )))
