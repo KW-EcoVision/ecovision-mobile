@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class EcoTextField extends StatefulWidget {
   final double width;
@@ -38,7 +37,7 @@ class _EcoTextFeildState extends State<EcoTextField> {
       ),
       child: Card(
         color: Colors.white,
-        elevation: 4,
+        elevation: 2,
         child: TextField(
           obscureText: widget.isPassword,
           decoration: InputDecoration(

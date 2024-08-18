@@ -1,6 +1,7 @@
 import 'package:eco_vision/model/SignupData.dart';
 import 'package:eco_vision/service/SignupValidator.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
+import 'package:eco_vision/view/widget/EcoButton.dart';
 import 'package:eco_vision/view/widget/EcoTextField.dart';
 import 'package:flutter/material.dart';
 
@@ -33,12 +34,9 @@ class _SignupPageState extends State<SignupPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const Center(
-                child: Text(
-                  'Sign Up',
-                  style: TextStyle(fontSize: 40),
-                ),
-              ),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Image.asset('assets/images/signup.png')),
               Column(
                 children: [
                   EcoTextField(
@@ -118,16 +116,28 @@ class _SignupPageState extends State<SignupPage> {
                 ],
               ),
               Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'OK',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              ),
+                child: EcoButton(
+                    onPressed: () {
+                      if ((validator.validateName(userData.name!)) &&
+                          (validator.validateUserId(userData.userId!)) &&
+                          (validator.validatePassword(userData.password!)) &&
+                          (userData.password == confirmPassword)) {
+                        // 회원가입 요청 추가
+                        Navigator.pop(context);
+                      }
+                    },
+                    text: 'OK',
+                    radius: 10,
+                    width: MediaQuery.of(context).size.width - 32,
+                    height: MediaQuery.of(context).size.height / 16,
+                    backgroundColor: (((validator
+                                .validateName(userData.name!)) &&
+                            (validator.validateUserId(userData.userId!)) &&
+                            (validator.validatePassword(userData.password!)) &&
+                            (userData.password == confirmPassword))
+                        ? EcoVisionColor.mainGreen
+                        : Colors.grey)),
+              )
             ],
           ),
         ),
