@@ -18,9 +18,7 @@ class _MainFrameState extends State<MainFrame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: pages[currentIndex],
-      ),
+      body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
