@@ -8,6 +8,7 @@ class EcoTextField extends StatefulWidget {
   final Color focusedBorderColor;
   final Color enabledBorderColor;
   final Icon? prefixIcon;
+  final Widget? suffix;
   final void Function(String)? onChanged;
   final String? labelText;
 
@@ -20,6 +21,7 @@ class EcoTextField extends StatefulWidget {
       required this.focusedBorderColor,
       required this.enabledBorderColor,
       this.prefixIcon,
+      this.suffix,
       this.onChanged,
       this.labelText});
 
@@ -42,6 +44,7 @@ class _EcoTextFeildState extends State<EcoTextField> {
           obscureText: widget.isPassword,
           decoration: InputDecoration(
             prefixIcon: widget.prefixIcon,
+            suffixIcon: widget.suffix,
             labelText: widget.labelText,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(widget.radius)),

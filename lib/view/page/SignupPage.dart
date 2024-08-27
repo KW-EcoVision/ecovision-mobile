@@ -1,5 +1,7 @@
 import 'package:eco_vision/model/SignupData.dart';
-import 'package:eco_vision/service/SignupValidator.dart';
+import 'package:eco_vision/service/NameValidator.dart';
+import 'package:eco_vision/service/PasswordValidator.dart';
+import 'package:eco_vision/service/UserIdValidator.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
 import 'package:eco_vision/view/widget/EcoButton.dart';
 import 'package:eco_vision/view/widget/EcoTextField.dart';
@@ -14,8 +16,11 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   SignupData userData = SignupData();
-  SignupValidator validator = SignupValidator();
-  String? confirmPassword = "";
+  UserIdValidator userIdValidator = UserIdValidator();
+  NameValidator nameValidator = NameValidator();
+  PasswordValidator passwordValidator = PasswordValidator();
+  String confirmPassword = "";
+  bool isNotDuplicated = false;
 
   // 유효성에 따른 경계 색상 반환
   Color borderColorByValid(bool? isValid) {
@@ -23,6 +28,15 @@ class _SignupPageState extends State<SignupPage> {
       return Colors.white; // 초기 상태
     }
     return isValid ? EcoVisionColor.neonGreen : Colors.red; // 유효성에 따라 색상 설정
+  }
+
+  Color borderColorByValidForId(bool? isValid) {
+    if (isValid == null) {
+      return Colors.white; // 초기 상태
+    }
+    return (isValid && isNotDuplicated)
+        ? EcoVisionColor.neonGreen
+        : Colors.red; // 유효성에 따라 색상 설정
   }
 
   @override
@@ -43,67 +57,113 @@ class _SignupPageState extends State<SignupPage> {
                     prefixIcon: const Icon(Icons.badge_outlined),
                     labelText: 'Name',
                     width: MediaQuery.of(context).size.width - 32,
-                    height: MediaQuery.of(context).size.height / 10,
+                    height: MediaQuery.of(context).size.height / 11,
                     enabledBorderColor:
-                        borderColorByValid(validator.isValidName),
+                        borderColorByValid(nameValidator.isValid),
                     focusedBorderColor:
-                        borderColorByValid(validator.isValidName),
+                        borderColorByValid(nameValidator.isValid),
                     radius: 10,
                     isPassword: false,
                     onChanged: (value) {
                       userData.name = value;
-                      validator.isValidName =
-                          validator.validateName(userData.name!);
+                      nameValidator.isValid =
+                          nameValidator.validate(userData.name);
                       setState(() {}); // UI 업데이트
                     },
+                  ),
+                  SizedBox(
+                    child: (nameValidator.validate(userData.name) ||
+                            userData.name.isEmpty)
+                        ? null
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width - 32,
+                            child: const Text(
+                              '  이름은 영문 또는 한글로 1자 이상이어야 합니다.',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
                   ),
                   EcoTextField(
                     prefixIcon: const Icon(Icons.person_outline_sharp),
                     labelText: 'ID',
                     width: MediaQuery.of(context).size.width - 32,
-                    height: MediaQuery.of(context).size.height / 10,
+                    height: MediaQuery.of(context).size.height / 11,
                     enabledBorderColor:
-                        borderColorByValid(validator.isValidUserId),
+                        borderColorByValidForId(userIdValidator.isValid),
                     focusedBorderColor:
-                        borderColorByValid(validator.isValidUserId),
+                        borderColorByValidForId(userIdValidator.isValid),
                     radius: 10,
                     isPassword: false,
+                    suffix: !(userIdValidator.validate(userData.userId))
+                        ? null
+                        : TextButton(
+                            onPressed: () {
+                              isNotDuplicated = !isNotDuplicated;
+                              // 아이디 중복검사 추가
+                              setState(() {});
+                            },
+                            child: const Text('중복검사')),
                     onChanged: (value) {
+                      isNotDuplicated = false;
                       userData.userId = value;
-                      validator.isValidUserId =
-                          validator.validateUserId(userData.userId!);
+                      userIdValidator.isValid =
+                          userIdValidator.validate(userData.userId);
                       setState(() {}); // UI 업데이트
                     },
+                  ),
+                  SizedBox(
+                    child: (userIdValidator.validate(userData.userId) ||
+                            userData.userId.isEmpty)
+                        ? null
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width - 32,
+                            child: const Text(
+                              '  아이디는 5글자 이상 20글자 이하여야 합니다.',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
                   ),
                   EcoTextField(
                     prefixIcon: const Icon(Icons.lock_outline_sharp),
                     labelText: 'Password',
                     width: MediaQuery.of(context).size.width - 32,
-                    height: MediaQuery.of(context).size.height / 10,
+                    height: MediaQuery.of(context).size.height / 11,
                     enabledBorderColor:
-                        borderColorByValid(validator.isValidPassword),
+                        borderColorByValid(passwordValidator.isValid),
                     focusedBorderColor:
-                        borderColorByValid(validator.isValidPassword),
+                        borderColorByValid(passwordValidator.isValid),
                     radius: 10,
                     isPassword: true,
                     onChanged: (value) {
                       userData.password = value;
-                      validator.isValidPassword =
-                          validator.validatePassword(userData.password!);
+                      passwordValidator.isValid =
+                          passwordValidator.validate(userData.password);
                       setState(() {});
                     },
+                  ),
+                  SizedBox(
+                    child: (passwordValidator.validate(userData.password) ||
+                            userData.password.isEmpty)
+                        ? null
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width - 32,
+                            child: const Text(
+                              '  비밀번호는 영문자와 숫자를 포함하여 9자 이상이어야 합니다.',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
                   ),
                   EcoTextField(
                     prefixIcon: const Icon(Icons.lock_outline_sharp),
                     labelText: 'Confirm Password',
                     width: MediaQuery.of(context).size.width - 32,
-                    height: MediaQuery.of(context).size.height / 10,
+                    height: MediaQuery.of(context).size.height / 11,
                     enabledBorderColor: borderColorByValid(
-                        confirmPassword!.isEmpty
+                        confirmPassword.isEmpty
                             ? null
                             : (userData.password == confirmPassword)),
                     focusedBorderColor: borderColorByValid(
-                        confirmPassword!.isEmpty
+                        confirmPassword.isEmpty
                             ? null
                             : (userData.password == confirmPassword)),
                     radius: 10,
@@ -118,10 +178,11 @@ class _SignupPageState extends State<SignupPage> {
               Center(
                 child: EcoButton(
                     onPressed: () {
-                      if ((validator.validateName(userData.name!)) &&
-                          (validator.validateUserId(userData.userId!)) &&
-                          (validator.validatePassword(userData.password!)) &&
-                          (userData.password == confirmPassword)) {
+                      if ((nameValidator.validate(userData.name)) &&
+                          (userIdValidator.validate(userData.userId)) &&
+                          (passwordValidator.validate(userData.password)) &&
+                          (userData.password == confirmPassword) &&
+                          isNotDuplicated) {
                         // 회원가입 요청 추가
                         Navigator.pop(context);
                       }
@@ -129,12 +190,13 @@ class _SignupPageState extends State<SignupPage> {
                     text: 'OK',
                     radius: 10,
                     width: MediaQuery.of(context).size.width - 32,
-                    height: MediaQuery.of(context).size.height / 16,
-                    backgroundColor: (((validator
-                                .validateName(userData.name!)) &&
-                            (validator.validateUserId(userData.userId!)) &&
-                            (validator.validatePassword(userData.password!)) &&
-                            (userData.password == confirmPassword))
+                    height: MediaQuery.of(context).size.height / 17,
+                    backgroundColor: (((nameValidator
+                                .validate(userData.name)) &&
+                            (userIdValidator.validate(userData.userId)) &&
+                            (passwordValidator.validate(userData.password)) &&
+                            (userData.password == confirmPassword) &&
+                            isNotDuplicated)
                         ? EcoVisionColor.mainGreen
                         : Colors.grey)),
               )
