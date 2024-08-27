@@ -1,6 +1,7 @@
 import 'package:eco_vision/view/page/LoginPage.dart';
 import 'package:eco_vision/view/page/setting/EditInfoPage.dart';
 import 'package:eco_vision/view/page/setting/EditPasswordPage.dart';
+import 'package:eco_vision/view/page/setting/ServiceTermPage.dart';
 import 'package:flutter/material.dart';
 
 class Setting extends StatefulWidget {
@@ -17,12 +18,8 @@ class _SettingState extends State<Setting> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           'Setting',
-          style: TextStyle(
-            fontFamily: 'bmjua',
-            // color: EcoVisionColor.mainGreen
-          ),
         ),
       ),
       body: SafeArea(
@@ -59,6 +56,17 @@ class _SettingState extends State<Setting> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => EditPasswordPage()));
+                        },
+                      ),
+                      ListTile(
+                        title: const Text(
+                          '위치 기반 서비스 이용약관',
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ServiceTermPage()));
                         },
                       ),
                       // Divider(),

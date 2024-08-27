@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
                       prefixIcon: const Icon(Icons.person_outline_sharp),
                       labelText: 'ID',
                       width: MediaQuery.of(context).size.width - 32,
-                      height: MediaQuery.of(context).size.height / 10,
+                      height: MediaQuery.of(context).size.height / 11,
                       enabledBorderColor: Colors.white,
                       focusedBorderColor: EcoVisionColor.neonGreen,
                       radius: 10,
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                     prefixIcon: const Icon(Icons.lock_outline_sharp),
                     labelText: 'Password',
                     width: MediaQuery.of(context).size.width - 32,
-                    height: MediaQuery.of(context).size.height / 10,
+                    height: MediaQuery.of(context).size.height / 11,
                     enabledBorderColor: Colors.white,
                     focusedBorderColor: EcoVisionColor.neonGreen,
                     radius: 10,
@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                 text: 'Login',
                 radius: 10,
                 width: MediaQuery.of(context).size.width - 32,
-                height: MediaQuery.of(context).size.height / 16,
+                height: MediaQuery.of(context).size.height / 17,
                 backgroundColor: (isIdEntered && isPasswordEnterd)
                     ? EcoVisionColor.mainGreen
                     : Colors.grey,
