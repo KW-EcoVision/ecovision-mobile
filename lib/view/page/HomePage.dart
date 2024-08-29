@@ -14,13 +14,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
-          'Home',
-          style: TextStyle(
-            fontFamily: 'bmjua',
-            // color: EcoVisionColor.mainGreen
-          ),
-        ),
+        title: const Text('Home'),
       ),
       body: SafeArea(
         child: Center(
