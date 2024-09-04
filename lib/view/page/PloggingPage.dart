@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:eco_vision/view/page/CameraPage.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class PloggingPage extends StatefulWidget {
@@ -15,6 +18,12 @@ class _PloggingPageState extends State<PloggingPage> {
   late List<CameraDescription> descriptions;
   late CameraController cameraController;
   bool isCameraInitialized = false;
+  double currentSpeed = 0;
+  StreamSubscription<Position>? positionStream;
+  int test = 0;
+  double timeInterval = 0;
+  double lastTime = 0;
+  double distanceStack = 0;
 
   Future<void> initCamera() async {
     descriptions = await availableCameras();
@@ -27,9 +36,35 @@ class _PloggingPageState extends State<PloggingPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    positionStream = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+          // accuracy: LocationAccuracy.high,
+          // distanceFilter: 10, // 위치 변경이 10m 이상일 때만 알림을 받음
+          ),
+    ).listen((Position position) {
+      double now = stopWatchTimer.rawTime.value / 1000;
+      timeInterval = now - lastTime;
+      // print('now : $now');
+      // print('time : $timeInterval');
+      lastTime = now;
+
+      setState(() {
+        currentSpeed = position.speed * 3.6; // 속도 업데이트
+
+        distanceStack += position.speed * timeInterval;
+      });
+      // print('speed : $currentSpeed');
+
+      // print('distance : $distanceStack');
+    });
+  }
+
+  @override
   void dispose() {
+    positionStream?.cancel();
     super.dispose();
-    stopWatchTimer.dispose();
   }
 
   @override
@@ -41,13 +76,21 @@ class _PloggingPageState extends State<PloggingPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('$currentSpeed km/h'),
+            Text('$distanceStack m'),
             StreamBuilder<int>(
                 stream: stopWatchTimer.rawTime,
                 builder: (context, snap) {
                   final int? value = snap.data;
                   final String displayTime =
-                      StopWatchTimer.getDisplayTime(value!);
-                  return Text(displayTime);
+                      StopWatchTimer.getDisplayTime(value!, milliSecond: false);
+                  // time = StopWatchRecord.fromRawValue(value->)
+                  return Text(
+                    displayTime,
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width / 8,
+                        fontWeight: FontWeight.bold),
+                  );
                 }),
             TextButton(
                 onPressed: () {
