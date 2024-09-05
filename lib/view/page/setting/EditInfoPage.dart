@@ -1,6 +1,7 @@
 import 'package:eco_vision/model/EditInfoData.dart';
 import 'package:eco_vision/service/NameValidator.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
+import 'package:eco_vision/view/widget/EcoButton.dart';
 import 'package:eco_vision/view/widget/EcoTextField.dart';
 import 'package:flutter/material.dart';
 
@@ -29,44 +30,68 @@ class _EditInfoPageState extends State<EditInfoPage> {
       appBar: AppBar(
         title: const Text(
           '내 정보 수정',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
       ),
       body: SafeArea(
-          child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            EcoTextField(
-              prefixIcon: const Icon(Icons.badge_outlined),
-              labelText: 'Name',
-              width: MediaQuery.of(context).size.width - 32,
-              height: MediaQuery.of(context).size.height / 10,
-              enabledBorderColor: borderColorByValid(nameValidator.isValid),
-              focusedBorderColor: borderColorByValid(nameValidator.isValid),
-              radius: 10,
-              isPassword: false,
-              onChanged: (value) {
-                userData.name = value;
-                nameValidator.isValid = nameValidator.validate(userData.name);
-                setState(() {}); // UI 업데이트
-              },
-            ),
-            SizedBox(
-              child: (nameValidator.validate(userData.name) ||
-                      userData.name.isEmpty)
-                  ? null
-                  : SizedBox(
-                      width: MediaQuery.of(context).size.width - 32,
-                      child: const Text(
-                        '  이름은 영문 또는 한글로 1자 이상이어야 합니다.',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const SizedBox(),
+              Column(
+                children: [
+                  EcoTextField(
+                    prefixIcon: const Icon(Icons.badge_outlined),
+                    labelText: 'Name',
+                    width: MediaQuery.of(context).size.width - 26,
+                    height: MediaQuery.of(context).size.height / 10,
+                    enabledBorderColor:
+                        borderColorByValid(nameValidator.isValid),
+                    focusedBorderColor:
+                        borderColorByValid(nameValidator.isValid),
+                    radius: 10,
+                    isPassword: false,
+                    onChanged: (value) {
+                      userData.name = value;
+                      nameValidator.isValid =
+                          nameValidator.validate(userData.name);
+                      setState(() {}); // UI 업데이트
+                    },
+                  ),
+                  SizedBox(
+                    child: (nameValidator.validate(userData.name) ||
+                            userData.name.isEmpty)
+                        ? null
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width - 26,
+                            child: const Text(
+                              '  이름은 영문 또는 한글로 1자 이상이어야 합니다.',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                  ),
+                ],
+              ),
+              EcoButton(
+                  onPressed: () {
+                    if ((nameValidator.validate(userData.name))) {
+                      // 회원가입 요청 추가
+                      Navigator.pop(context);
+                    }
+                  },
+                  text: 'OK',
+                  radius: 10,
+                  width: MediaQuery.of(context).size.width - 32,
+                  height: MediaQuery.of(context).size.height / 17,
+                  backgroundColor: (((nameValidator.validate(userData.name)))
+                      ? EcoVisionColor.mainGreen
+                      : Colors.grey)),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }

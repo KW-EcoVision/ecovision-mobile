@@ -2,7 +2,10 @@ import 'package:eco_vision/view/page/LoginPage.dart';
 import 'package:eco_vision/view/page/setting/EditInfoPage.dart';
 import 'package:eco_vision/view/page/setting/EditPasswordPage.dart';
 import 'package:eco_vision/view/page/setting/ServiceTermPage.dart';
+import 'package:eco_vision/view/widget/EcoAlertDialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -20,73 +23,74 @@ class _SettingState extends State<Setting> {
         backgroundColor: Colors.white,
         title: const Text(
           'Setting',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
         child: Center(
-            child: Column(
-          children: [
-            Container(
-                margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                width: MediaQuery.of(context).size.width - 32,
-                child: Card(
-                  color: Colors.white,
-                  child: ListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      ListTile(
-                        title: const Text(
-                          '내 정보 수정',
+          child: Column(
+            children: [
+              Container(
+                  margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  width: MediaQuery.of(context).size.width - 20,
+                  child: Card(
+                    color: Colors.white,
+                    child: ListView(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        ListTile(
+                          title: const Text(
+                            '내 정보 수정',
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditInfoPage()));
+                          },
                         ),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditInfoPage()));
-                        },
-                      ),
-                      // Divider(),
-                      ListTile(
-                        title: const Text(
-                          '비밀번호 변경',
+                        // Divider(),
+                        ListTile(
+                          title: const Text(
+                            '비밀번호 변경',
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditPasswordPage()));
+                          },
                         ),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditPasswordPage()));
-                        },
-                      ),
-                      ListTile(
-                        title: const Text(
-                          '위치 기반 서비스 이용약관',
+                        ListTile(
+                          title: const Text(
+                            '위치 기반 서비스 이용약관',
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ServiceTermPage()));
+                          },
                         ),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ServiceTermPage()));
-                        },
-                      ),
-                      // Divider(),
-                      ListTile(
-                        title: const Text(
-                          '로그아웃',
+                        // Divider(),
+                        ListTile(
+                          title: const Text(
+                            '로그아웃',
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
+                                (route) => false);
+                          },
                         ),
-                        onTap: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginPage()),
-                              (route) => false);
-                        },
-                      ),
-                    ],
-                  ),
-                )),
-            Container(
-                margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                width: MediaQuery.of(context).size.width - 32,
+                      ],
+                    ),
+                  )),
+              Container(
+                margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                width: MediaQuery.of(context).size.width - 20,
                 // height: MediaQuery.of(context).size.width / 3 - 32,
                 child: Card(
                   color: Colors.white,
@@ -99,13 +103,34 @@ class _SettingState extends State<Setting> {
                           '계정 탈퇴',
                           style: TextStyle(color: Colors.red),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          showCupertinoDialog(
+                              context: context,
+                              builder: (context) {
+                                return EcoAlertDialog(
+                                  title: '계정을 삭제하시겠습니까?',
+                                  content: '당신의 모든 데이터가 삭제되며 다시 복구할 수 없습니다.',
+                                  acceptFunction: () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LoginPage()),
+                                        (route) => false);
+                                  },
+                                  cancelFunction: () {
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              });
+                        },
                       ),
                     ],
                   ),
-                )),
-          ],
-        )),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

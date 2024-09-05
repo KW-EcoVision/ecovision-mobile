@@ -33,7 +33,10 @@ class _HistoryState extends State<History> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('history'),
+        title: const Text(
+          'History',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: SafeArea(
         child: isHistoriesInitialized
@@ -42,8 +45,8 @@ class _HistoryState extends State<History> {
                     itemCount: histories.length,
                     itemBuilder: (context, index) {
                       return Container(
-                        margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                        width: MediaQuery.of(context).size.width - 32,
+                        margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                        width: MediaQuery.of(context).size.width - 20,
                         // height: MediaQuery.of(context).size.width / 3 - 32,
                         child: Card(
                           color: Colors.white,
