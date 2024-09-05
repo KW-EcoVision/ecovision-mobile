@@ -13,8 +13,13 @@ class MainFrame extends StatefulWidget {
 }
 
 class _MainFrameState extends State<MainFrame> {
-  int currentIndex = 0;
-  List pages = [Home(), Activity(), History(), Setting()];
+  int currentIndex = 1;
+  List pages = [
+    const Home(),
+    const Activity(),
+    const History(),
+    const Setting()
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

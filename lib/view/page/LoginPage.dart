@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
                   EcoTextField(
                       prefixIcon: const Icon(Icons.person_outline_sharp),
                       labelText: 'ID',
-                      width: MediaQuery.of(context).size.width - 32,
+                      width: MediaQuery.of(context).size.width - 26,
                       height: MediaQuery.of(context).size.height / 11,
                       enabledBorderColor: Colors.white,
                       focusedBorderColor: EcoVisionColor.neonGreen,
@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                   EcoTextField(
                     prefixIcon: const Icon(Icons.lock_outline_sharp),
                     labelText: 'Password',
-                    width: MediaQuery.of(context).size.width - 32,
+                    width: MediaQuery.of(context).size.width - 26,
                     height: MediaQuery.of(context).size.height / 11,
                     enabledBorderColor: Colors.white,
                     focusedBorderColor: EcoVisionColor.neonGreen,
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                     width: MediaQuery.of(context).size.width - 40,
                     child: Row(
                       children: [
-                        Text(
+                        const Text(
                           ' 아직 회원이 아니신가요?',
                           style: TextStyle(color: Colors.grey),
                         ),
@@ -87,22 +87,23 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               Center(
-                  child: EcoButton(
-                text: 'Login',
-                radius: 10,
-                width: MediaQuery.of(context).size.width - 32,
-                height: MediaQuery.of(context).size.height / 17,
-                backgroundColor: (isIdEntered && isPasswordEnterd)
-                    ? EcoVisionColor.mainGreen
-                    : Colors.grey,
-                onPressed: () {
-                  if (isIdEntered && isPasswordEnterd) {
-                    // 로그인 요청 추가
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => MainFrame()));
-                  }
-                },
-              ))
+                child: EcoButton(
+                  text: 'Login',
+                  radius: 10,
+                  width: MediaQuery.of(context).size.width - 32,
+                  height: MediaQuery.of(context).size.height / 17,
+                  backgroundColor: (isIdEntered && isPasswordEnterd)
+                      ? EcoVisionColor.mainGreen
+                      : Colors.grey,
+                  onPressed: () {
+                    if (isIdEntered && isPasswordEnterd) {
+                      // 로그인 요청 추가
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => MainFrame()));
+                    }
+                  },
+                ),
+              )
             ],
           ),
         ),

@@ -56,7 +56,7 @@ class _SignupPageState extends State<SignupPage> {
                   EcoTextField(
                     prefixIcon: const Icon(Icons.badge_outlined),
                     labelText: 'Name',
-                    width: MediaQuery.of(context).size.width - 32,
+                    width: MediaQuery.of(context).size.width - 26,
                     height: MediaQuery.of(context).size.height / 11,
                     enabledBorderColor:
                         borderColorByValid(nameValidator.isValid),
@@ -76,7 +76,7 @@ class _SignupPageState extends State<SignupPage> {
                             userData.name.isEmpty)
                         ? null
                         : SizedBox(
-                            width: MediaQuery.of(context).size.width - 32,
+                            width: MediaQuery.of(context).size.width - 26,
                             child: const Text(
                               '  이름은 영문 또는 한글로 1자 이상이어야 합니다.',
                               style: TextStyle(color: Colors.red),
@@ -86,7 +86,7 @@ class _SignupPageState extends State<SignupPage> {
                   EcoTextField(
                     prefixIcon: const Icon(Icons.person_outline_sharp),
                     labelText: 'ID',
-                    width: MediaQuery.of(context).size.width - 32,
+                    width: MediaQuery.of(context).size.width - 26,
                     height: MediaQuery.of(context).size.height / 11,
                     enabledBorderColor:
                         borderColorByValidForId(userIdValidator.isValid),
@@ -116,7 +116,7 @@ class _SignupPageState extends State<SignupPage> {
                             userData.userId.isEmpty)
                         ? null
                         : SizedBox(
-                            width: MediaQuery.of(context).size.width - 32,
+                            width: MediaQuery.of(context).size.width - 26,
                             child: const Text(
                               '  아이디는 5글자 이상 20글자 이하여야 합니다.',
                               style: TextStyle(color: Colors.red),
@@ -126,7 +126,7 @@ class _SignupPageState extends State<SignupPage> {
                   EcoTextField(
                     prefixIcon: const Icon(Icons.lock_outline_sharp),
                     labelText: 'Password',
-                    width: MediaQuery.of(context).size.width - 32,
+                    width: MediaQuery.of(context).size.width - 26,
                     height: MediaQuery.of(context).size.height / 11,
                     enabledBorderColor:
                         borderColorByValid(passwordValidator.isValid),
@@ -146,7 +146,7 @@ class _SignupPageState extends State<SignupPage> {
                             userData.password.isEmpty)
                         ? null
                         : SizedBox(
-                            width: MediaQuery.of(context).size.width - 32,
+                            width: MediaQuery.of(context).size.width - 26,
                             child: const Text(
                               '  비밀번호는 영문자와 숫자를 포함하여 9자 이상이어야 합니다.',
                               style: TextStyle(color: Colors.red),
@@ -156,7 +156,7 @@ class _SignupPageState extends State<SignupPage> {
                   EcoTextField(
                     prefixIcon: const Icon(Icons.lock_outline_sharp),
                     labelText: 'Confirm Password',
-                    width: MediaQuery.of(context).size.width - 32,
+                    width: MediaQuery.of(context).size.width - 26,
                     height: MediaQuery.of(context).size.height / 11,
                     enabledBorderColor: borderColorByValid(
                         confirmPassword.isEmpty
