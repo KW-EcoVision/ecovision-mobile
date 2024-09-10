@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 import torch
-from utils import create_label_at_one_xml_path,get_augmentor
+from utils import create_label_at_one_xml_path,get_augmentor, split_xml_path
 from PIL import Image as image
 
 
@@ -31,3 +31,15 @@ class Dataset(Dataset):
 
     def __len__(self):
         return int(len(self.xml_np))
+
+if __name__ == "__main__":
+    COMMON_PATH = '/media/sien/DATA/DATA/dataset/eco/sample'
+    IMG_DIR = COMMON_PATH + '/Training/'
+    LABEL_DIR = COMMON_PATH + '/Validation/'
+
+    train_path, val_path, test_path, sample_path = split_xml_path(LABEL_DIR)
+    sample_ds = Dataset(sample_path, IMG_DIR)
+    #sample_loader = DataLoader(sample_ds, batch_size=BATCH_SIZE, shuffle=True)
+
+    test_ds = Dataset(sample_path, IMG_DIR)
+    #test_loader = DataLoader(test_ds, batch_size=BATCH_SIZE, shuffle=True)

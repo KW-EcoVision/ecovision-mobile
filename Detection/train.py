@@ -13,7 +13,6 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 from field import field
 import matplotlib.pyplot as plt
-from transformer_back_based_detertor import VIT as trans_yolo
 
 
 BACK = 'RES'
@@ -56,8 +55,7 @@ elif BACK == 'RES':
 elif BACK =='DARK' :
     model = YOLO_DARK(split_size=7, num_boxes=2, num_classes=20)
     print(model)
-elif BACK == 'trans':
-    model = trans_yolo()
+
 train_path, val_path, test_path,sample_path = split_xml_path(LABEL_DIR)
 sample_ds = Dataset(sample_path, IMG_DIR)
 sample_loader = DataLoader(sample_ds, batch_size=BATCH_SIZE,shuffle=True)

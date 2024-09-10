@@ -13,31 +13,25 @@ import config
 'img_dir' is not direct_path just dir
 'img_path' is direct img_path
 '''
-classes_num = {'aeroplane': 0, 'bicycle': 1, 'bird': 2, 'boat': 3, 'bottle': 4, 'bus': 5,
-               'car': 6, 'cat': 7, 'chair': 8, 'cow': 9, 'diningtable': 10, 'dog': 11,
-               'horse': 12, 'motorbike': 13, 'person': 14, 'pottedplant': 15, 'sheep': 16,
-               'sofa': 17, 'train': 18, 'tvmonitor': 19}
+classes_num = {'종이류': 0, '플라스틱': 1, '유리': 2, '캔': 3, '고철류': 4, '의류': 5,
+               '전자제품': 6, '스티로폼': 7, '도기류': 8, '비닐류': 9, '가구': 10, '자전거': 11,
+               '형광등': 12, '페트병류': 13, '나무류': 14}
 classes_num_rev = {
-    0: 'aeroplane',
-    1: 'bicycle',
-    2: 'bird',
-    3: 'boat',
-    4: 'bottle',
-    5: 'bus',
-    6: 'car',
-    7: 'cat',
-    8: 'chair',
-    9: 'cow',
-    10: 'diningtable',
-    11: 'dog',
-    12: 'horse',
-    13: 'motorbike',
-    14: 'person',
-    15: 'pottedplant',
-    16: 'sheep',
-    17: 'sofa',
-    18: 'train',
-    19: 'tvmonitor'
+    0: '종이류',
+    1: '플라스틱',
+    2: '유리',
+    3: '캔',
+    4: '고철류',
+    5: '의류',
+    6: '전자제품',
+    7: '스티로폼',
+    8: '도기류',
+    9: '비닐류',
+    10: '가구',
+    11: '자전거',
+    12: '형광등',
+    13: '페트병류',
+    14: '나무류',
 }
 
 
@@ -162,31 +156,6 @@ def get_augmentor():
         transforms.Resize(size=(int(IMG_SIZE),int(IMG_SIZE))),
         transforms.ToTensor()
     ])
-def get_person(xml_dir):
-    path_list = []
-    cnt = 0
-    for file_path, _, file_name in os.walk(xml_dir):
-        for name in file_name:
-
-            full_path = file_path+name
-            tree = ET.parse(full_path)
-            root = tree.getroot()
-            for obj in root.findall('object'):
-                class_name = obj.find('name').text
-                class_id = classes_num[class_name]
-                if class_id == 14:
-                    path_list.append(full_path)
-    dummy_label = np.zeros(shape=(len(path_list),))
-    train_path, test_path, t_l, e_l = train_test_split(path_list, dummy_label, train_size=0.9, test_size=0.1,
-                                                       shuffle=False)
-    train_path, val_path, _, __ = train_test_split(train_path, t_l, train_size=0.9, test_size=0.1, shuffle=False)
-    val_path, sample_path, ___, ____ = train_test_split(val_path, __, train_size=0.9, test_size=0.1, shuffle=False)
-    return train_path, val_path, test_path, sample_path
-
-
-
-
-
 
 def split_xml_path(xml_dir):
     path_list = []
@@ -195,7 +164,7 @@ def split_xml_path(xml_dir):
         for name in file_name:
             full_path = file_path+name
             path_list.append(full_path)
-    dummy_label = np.zeros(shape=(22136,))
+    dummy_label = np.zeros(shape=(len(path_list),))
     train_path,test_path,t_l,e_l = train_test_split(path_list,dummy_label,train_size=0.95,test_size=0.05,shuffle=False)
     train_path,val_path,_,__  = train_test_split(train_path,t_l,train_size=0.9,test_size=0.1,shuffle=False)
     val_path,sample_path,___,____ = train_test_split(val_path,__,train_size=0.9,test_size=0.1,shuffle=False)
@@ -279,7 +248,6 @@ def intersection_over_union(boxes_preds, boxes_labels):
     return intersection / (box1_area + box2_area - intersection + 1e-6)
 
 def bbox_attr(data, i):
-    """Returns the Ith attribute of each bounding box in data."""
 
     attr_start = 20 + i
     return data[..., attr_start::5]
