@@ -1,5 +1,6 @@
+import 'dart:async';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
-import 'package:eco_vision/view/page/PloggingPage.dart';
+import 'package:eco_vision/view/page/PloggingBottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -19,7 +20,6 @@ class _ActivityState extends State<Activity> {
   late LocationData locationData;
   double? latitude;
   double? longitude;
-
   late String currentLocation;
 
   late GoogleMapController mapController;
@@ -32,13 +32,18 @@ class _ActivityState extends State<Activity> {
     locationData = await location.getLocation();
     latitude = locationData.latitude;
     longitude = locationData.longitude;
+
     String gpsUrl =
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=[apikey]&language=ko';
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=apikey&language=ko';
     final responseGps = await http.get(Uri.parse(gpsUrl));
     Map<String, dynamic> result = jsonDecode(responseGps.body);
-    String address = result['results'][1]['formatted_address'];
-    currentLocation =
-        address.split(' ').sublist(1, address.split(' ').length - 1).join(' ');
+    String address = result['results'][0]['formatted_address'];
+    currentLocation = (address.split(' ').length < 4)
+        ? address.split(' ').sublist(1, address.split(' ').length).join(' ')
+        : address
+            .split(' ')
+            .sublist(1, address.split(' ').length - 1)
+            .join(' ');
   }
 
   @override
@@ -52,12 +57,22 @@ class _ActivityState extends State<Activity> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: EcoVisionColor.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: isLocationInitialized ? Text(currentLocation) : const Text(''),
+        backgroundColor: EcoVisionColor.background,
+        title: isLocationInitialized
+            ? Text(
+                currentLocation,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              )
+            : const Text(''),
       ),
       body: SafeArea(
         child: Center(
@@ -81,18 +96,18 @@ class _ActivityState extends State<Activity> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),
-          child: const Text(
-            '시작',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 40),
+          child: const Icon(
+            Icons.directions_walk_outlined,
+            color: Colors.white,
+            size: 65,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const PloggingPage(),
-              ),
-            );
+            showBottomSheet(
+                enableDrag: false,
+                context: context,
+                builder: (context) {
+                  return const PloggingBottomSheet();
+                });
           },
         ),
       ),
