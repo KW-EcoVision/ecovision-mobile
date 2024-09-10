@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-
+s
 
 architecture_config = [
     (7, 64, 2, 3),
