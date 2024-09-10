@@ -4,7 +4,7 @@
 
 ### sample parse. DONE
 
-### Hardware 
+### Hardware \\ GPU will be changed to H100 80G
 
 ![img_1.png](img_1.png)
 
