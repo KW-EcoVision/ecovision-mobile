@@ -10,26 +10,6 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-  // late List<CameraDescription> descriptions;
-  // late CameraController cameraController;
-  // bool isCameraInitialized = false;
-
-  // Future<void> initCamera() async {
-  //   descriptions = await availableCameras();
-  //   cameraController = CameraController(descriptions[0], ResolutionPreset.high);
-  //   await cameraController.initialize();
-  //   print('camera is ready!');
-  //   setState(() {
-  //     isCameraInitialized = true;
-  //   });
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   initCamera();
-  // }
-
   @override
   void dispose() {
     widget.cameraController.dispose();
@@ -38,56 +18,61 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      Positioned.fill(
-        child: CameraPreview(
-          widget.cameraController,
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: CameraPreview(
+            widget.cameraController,
+          ),
         ),
-      ),
-      Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Opacity(
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Opacity(
                 opacity: 0.6,
                 child: Container(
-                    color: Colors.black,
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                            color: Colors.white,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(
-                              Icons.exit_to_app_outlined,
-                              size: MediaQuery.of(context).size.width / 13,
-                            )),
-                        Container(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width / 15),
-                          child: IconButton(
-                              color: Colors.white,
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.camera_outlined,
-                                size: MediaQuery.of(context).size.width / 5,
-                              )),
-                        ),
-                        IconButton(
+                  color: Colors.black,
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                          color: Colors.white,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.exit_to_app_outlined,
+                            size: MediaQuery.of(context).size.width / 13,
+                          )),
+                      Container(
+                        padding: EdgeInsets.all(
+                            MediaQuery.of(context).size.width / 15),
+                        child: IconButton(
                             color: Colors.white,
                             onPressed: () {},
                             icon: Icon(
-                              Icons.refresh,
-                              size: MediaQuery.of(context).size.width / 13,
+                              Icons.camera_outlined,
+                              size: MediaQuery.of(context).size.width / 5,
                             )),
-                      ],
-                    ))),
-          ],
-        ),
-      )
-    ]);
+                      ),
+                      IconButton(
+                        color: Colors.white,
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.refresh,
+                          size: MediaQuery.of(context).size.width / 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
   }
 }
