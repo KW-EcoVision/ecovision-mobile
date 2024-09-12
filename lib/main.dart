@@ -1,8 +1,10 @@
 import 'package:eco_vision/view/page/LoginPage.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 void main() {
+  // debugPaintSizeEnabled = true;
   runApp(const MyApp());
 }
 
@@ -15,6 +17,7 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
       theme: ThemeData(
+        fontFamily: 'NanumSquareNeo-bRg',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
       ),
       title: 'Eco Vision',
