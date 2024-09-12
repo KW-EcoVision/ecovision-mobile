@@ -1,5 +1,6 @@
 import 'package:eco_vision/model/HistoryData.dart';
 import 'package:eco_vision/service/HistoryTest.dart';
+import 'package:eco_vision/view/const/EcoVisionColor.dart';
 import 'package:flutter/material.dart';
 
 class History extends StatefulWidget {
@@ -30,9 +31,9 @@ class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: EcoVisionColor.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: EcoVisionColor.background,
         title: const Text(
           'History',
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -47,13 +48,16 @@ class _HistoryState extends State<History> {
                       return Container(
                         margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                         width: MediaQuery.of(context).size.width - 20,
-                        // height: MediaQuery.of(context).size.width / 3 - 32,
-                        child: Card(
-                          color: Colors.white,
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                                '장소: ${histories[index].location}\n시간: ${histories[index].time}분\n거리: ${histories[index].distance}km\n주운 쓰레기: ${histories[index].trashCount}개'),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          onTap: () {},
+                          child: Card(
+                            color: Colors.white,
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                  '장소: ${histories[index].location}\n시간: ${histories[index].time}분\n거리: ${histories[index].distance}km\n주운 쓰레기: ${histories[index].trashCount}개'),
+                            ),
                           ),
                         ),
                       );
