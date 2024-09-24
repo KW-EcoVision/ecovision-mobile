@@ -1,7 +1,8 @@
 import 'package:eco_vision/model/PostData.dart';
 import 'package:eco_vision/service/PostTest.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
-import 'package:eco_vision/view/page/PostViewPage.dart';
+import 'package:eco_vision/view/page/home/PostViewPage.dart';
+import 'package:eco_vision/view/page/home/PostWritePage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -98,7 +99,10 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: EcoVisionColor.mainGreen,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => PostWritePage()));
+        },
         child: const Icon(
           Icons.edit_note_outlined,
           color: Colors.white,
