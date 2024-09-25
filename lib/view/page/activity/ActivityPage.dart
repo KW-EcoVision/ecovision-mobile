@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
-import 'package:eco_vision/view/page/PloggingBottomSheet.dart';
+import 'package:eco_vision/view/page/activity/PloggingBottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';

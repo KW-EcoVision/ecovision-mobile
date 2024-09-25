@@ -15,9 +15,11 @@ class PloggingPage extends StatefulWidget {
 
 class _PloggingPageState extends State<PloggingPage> {
   final stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
+
   late List<CameraDescription> descriptions;
   late CameraController cameraController;
   bool isCameraInitialized = false;
+
   double currentSpeed = 0;
   StreamSubscription<Position>? positionStream;
   int test = 0;
@@ -51,9 +53,12 @@ class _PloggingPageState extends State<PloggingPage> {
       lastTime = now;
 
       setState(() {
-        currentSpeed = position.speed * 3.6; // 속도 업데이트
-
-        distanceStack += position.speed * timeInterval;
+        if (position.speed < 1) {
+          distanceStack += 0 * timeInterval;
+        } else {
+          currentSpeed = position.speed * 3.6; // 속도 업데이트
+          distanceStack += position.speed * timeInterval;
+        }
       });
       // print('speed : $currentSpeed');
 
@@ -76,8 +81,8 @@ class _PloggingPageState extends State<PloggingPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('$currentSpeed km/h'),
-            Text('$distanceStack m'),
+            Text('${currentSpeed.toStringAsFixed(2)} km/h'),
+            Text('${distanceStack.toStringAsFixed(2)} m'),
             StreamBuilder<int>(
                 stream: stopWatchTimer.rawTime,
                 builder: (context, snap) {
@@ -87,9 +92,9 @@ class _PloggingPageState extends State<PloggingPage> {
                   // time = StopWatchRecord.fromRawValue(value->)
                   return Text(
                     displayTime,
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width / 8,
-                        fontWeight: FontWeight.bold),
+                    // style: TextStyle(
+                    //     fontSize: MediaQuery.of(context).size.width / 8,
+                    //     fontWeight: FontWeight.bold),
                   );
                 }),
             TextButton(
