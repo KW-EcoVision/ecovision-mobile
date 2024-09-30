@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
-import 'package:eco_vision/view/page/CameraPage.dart';
+import 'package:eco_vision/view/page/activity/CameraPage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+
+//legacy : to be deleted
 
 class PloggingPage extends StatefulWidget {
   const PloggingPage({super.key});

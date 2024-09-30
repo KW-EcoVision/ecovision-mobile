@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
-import 'package:eco_vision/view/page/CameraPage.dart';
+import 'package:eco_vision/view/page/activity/CameraPage.dart';
 import 'package:eco_vision/view/page/MainFrame.dart';
 import 'package:eco_vision/view/widget/EcoAlertDialog.dart';
 import 'package:flutter/cupertino.dart';
