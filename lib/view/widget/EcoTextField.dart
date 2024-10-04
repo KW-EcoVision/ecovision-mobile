@@ -11,6 +11,7 @@ class EcoTextField extends StatefulWidget {
   final Widget? suffix;
   final void Function(String)? onChanged;
   final String? labelText;
+  final int? maxLine;
 
   const EcoTextField(
       {super.key,
@@ -23,7 +24,8 @@ class EcoTextField extends StatefulWidget {
       this.prefixIcon,
       this.suffix,
       this.onChanged,
-      this.labelText});
+      this.labelText,
+      this.maxLine});
 
   @override
   State<EcoTextField> createState() => _EcoTextFeildState();
@@ -41,6 +43,9 @@ class _EcoTextFeildState extends State<EcoTextField> {
         color: Colors.white,
         elevation: 2,
         child: TextField(
+          maxLines: (widget.isPassword || widget.maxLine == null)
+              ? 1
+              : widget.maxLine,
           obscureText: widget.isPassword,
           decoration: InputDecoration(
             prefixIcon: widget.prefixIcon,
