@@ -42,7 +42,7 @@ class _ActivityState extends State<Activity> {
         ? address.split(' ').sublist(1, address.split(' ').length).join(' ')
         : address
             .split(' ')
-            .sublist(1, address.split(' ').length - 1)
+            .sublist(1, address.split(' ').length - 2)
             .join(' ');
   }
 
