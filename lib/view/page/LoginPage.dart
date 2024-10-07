@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: EcoVisionColor.background,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                   child: SizedBox(
                       width: MediaQuery.of(context).size.width / 2,
-                      child: Image.asset('assets/images/logo.jpeg'))),
+                      child: Image.asset('assets/images/logo.png'))),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
