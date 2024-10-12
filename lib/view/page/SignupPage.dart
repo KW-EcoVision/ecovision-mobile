@@ -1,11 +1,16 @@
+import 'dart:convert';
+
 import 'package:eco_vision/model/SignupData.dart';
 import 'package:eco_vision/service/NameValidator.dart';
 import 'package:eco_vision/service/PasswordValidator.dart';
 import 'package:eco_vision/service/UserIdValidator.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
+import 'package:eco_vision/view/page/LoginPage.dart';
 import 'package:eco_vision/view/widget/EcoButton.dart';
 import 'package:eco_vision/view/widget/EcoTextField.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -177,14 +182,62 @@ class _SignupPageState extends State<SignupPage> {
               ),
               Center(
                 child: EcoButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if ((nameValidator.validate(userData.name)) &&
                           (userIdValidator.validate(userData.userId)) &&
                           (passwordValidator.validate(userData.password)) &&
                           (userData.password == confirmPassword) &&
                           isNotDuplicated) {
-                        // 회원가입 요청 추가
-                        Navigator.pop(context);
+                        final http.Response response = await http.post(
+                            Uri.parse("http://43.201.1.7:8080/join"),
+                            headers: {'Content-Type': 'application/json'},
+                            body: json.encode({
+                              'name': userData.name,
+                              'username': userData.userId,
+                              'password': userData.password
+                            }));
+                        if (response.statusCode == 201) {
+                          showCupertinoDialog(
+                              context: context,
+                              builder: (context) {
+                                return CupertinoAlertDialog(
+                                  title: const Text('회원가입이 완료되었습니다'),
+                                  content: const Text('로그인을 진행해주세요'),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      isDefaultAction: true,
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const LoginPage()),
+                                                (route) => false);
+                                      },
+                                      child: const Text("확인"),
+                                    ),
+                                  ],
+                                );
+                              });
+                        } else {
+                          showCupertinoDialog(
+                              context: context,
+                              builder: (context) {
+                                return CupertinoAlertDialog(
+                                  title: const Text('회원가입에 실패했습니다'),
+                                  content: const Text('다시 시도해주세요'),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      isDefaultAction: true,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("확인"),
+                                    ),
+                                  ],
+                                );
+                              });
+                        }
                       }
                     },
                     text: 'OK',
