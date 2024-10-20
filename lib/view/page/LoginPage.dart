@@ -3,7 +3,10 @@ import 'package:eco_vision/view/page/MainFrame.dart';
 import 'package:eco_vision/view/page/SignupPage.dart';
 import 'package:eco_vision/view/widget/EcoButton.dart';
 import 'package:eco_vision/view/widget/EcoTextField.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late String userId;
+  late String password;
   bool isIdEntered = false;
   bool isPasswordEnterd = false;
 
@@ -43,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                       isPassword: false,
                       onChanged: (value) {
                         setState(() {
+                          userId = value;
                           isIdEntered = value.isNotEmpty;
                         });
                       }),
@@ -60,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                     isPassword: true,
                     onChanged: (value) {
                       setState(() {
+                        password = value;
                         isPasswordEnterd = value.isNotEmpty;
                       });
                     },
@@ -78,7 +85,8 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SignupPage()));
+                                      builder: (context) =>
+                                          const SignupPage()));
                             },
                             child: const Text('Sign up'))
                       ],
@@ -95,11 +103,49 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: (isIdEntered && isPasswordEnterd)
                       ? EcoVisionColor.mainGreen
                       : Colors.grey,
-                  onPressed: () {
+                  onPressed: () async {
                     if (isIdEntered && isPasswordEnterd) {
+                      final http.Response response = await http.post(
+                          Uri.parse("http://43.201.1.7:8080/login"),
+                          headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                          },
+                          body: {
+                            'username': userId,
+                            'password': password
+                          });
+                      if (response.statusCode == 200) {
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+
+                        await prefs.setString(
+                            'accessToken', response.headers['authorization']!);
+
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MainFrame()));
+                      } else {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: const Text('로그인에 실패했습니다'),
+                                content:
+                                    const Text('아이디와 비밀번호를 확인하고 다시 시도해주세요'),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    isDefaultAction: true,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("확인"),
+                                  ),
+                                ],
+                              );
+                            });
+                      }
                       // 로그인 요청 추가
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => MainFrame()));
                     }
                   },
                 ),
