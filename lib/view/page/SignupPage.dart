@@ -102,8 +102,24 @@ class _SignupPageState extends State<SignupPage> {
                     suffix: !(userIdValidator.validate(userData.userId))
                         ? null
                         : TextButton(
-                            onPressed: () {
-                              isNotDuplicated = !isNotDuplicated;
+                            onPressed: () async {
+                              final http.Response response = await http.post(
+                                  Uri.parse(
+                                      "http://43.201.1.7:8080/validate-id"),
+                                  headers: {'Content-Type': 'application/json'},
+                                  body: json.encode({
+                                    'username': userData.userId,
+                                  }));
+                              if (response.statusCode == 200) {
+                                setState(() {
+                                  isNotDuplicated = true;
+                                });
+                              } else {
+                                setState(() {
+                                  isNotDuplicated = false;
+                                });
+                              }
+                              // isNotDuplicated = !isNotDuplicated;
                               // 아이디 중복검사 추가
                               setState(() {});
                             },
