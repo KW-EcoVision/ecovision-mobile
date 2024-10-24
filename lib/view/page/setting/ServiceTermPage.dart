@@ -11,6 +11,7 @@ class ServiceTermPage extends StatelessWidget {
         backgroundColor: Colors.white,
         title: const Text(
           '위치 기반 서비스 이용약관',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(

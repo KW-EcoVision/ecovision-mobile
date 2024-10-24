@@ -1,3 +1,4 @@
+import 'package:eco_vision/view/const/EcoVisionColor.dart';
 import 'package:eco_vision/view/page/LoginPage.dart';
 import 'package:eco_vision/view/page/setting/EditInfoPage.dart';
 import 'package:eco_vision/view/page/setting/EditPasswordPage.dart';
@@ -5,7 +6,6 @@ import 'package:eco_vision/view/page/setting/ServiceTermPage.dart';
 import 'package:eco_vision/view/widget/EcoAlertDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -18,9 +18,9 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: EcoVisionColor.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: EcoVisionColor.background,
         title: const Text(
           'Setting',
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -47,7 +47,8 @@ class _SettingState extends State<Setting> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => EditInfoPage()));
+                                    builder: (context) =>
+                                        const EditInfoPage()));
                           },
                         ),
                         // Divider(),
@@ -59,7 +60,8 @@ class _SettingState extends State<Setting> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => EditPasswordPage()));
+                                    builder: (context) =>
+                                        const EditPasswordPage()));
                           },
                         ),
                         ListTile(
@@ -70,7 +72,8 @@ class _SettingState extends State<Setting> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ServiceTermPage()));
+                                    builder: (context) =>
+                                        const ServiceTermPage()));
                           },
                         ),
                         // Divider(),
