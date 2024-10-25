@@ -3,6 +3,10 @@ import 'package:eco_vision/service/HistoryTest.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
 import 'package:eco_vision/view/page/history/HistoryDetailPage.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class History extends StatefulWidget {
   const History({super.key});
@@ -14,12 +18,20 @@ class History extends StatefulWidget {
 class _HistoryState extends State<History> {
   bool isHistoriesInitialized = false;
   late List<HistoryData> histories;
+  // late String token;
+  // late SharedPreferences prefs;
+  // late Future<http.Response> response;
   HistoryTest test = HistoryTest();
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
-    // test대신 기록 받아오는 api 넣기
+    // // test대신 기록 받아오는 api 넣기
+    // prefs = await SharedPreferences.getInstance();
+    // token = prefs.getString('accessToken')!;
+
+    // response = http.get(Uri.parse("http://43.201.1.7:8080/total-and-list-view"),
+    //     headers: {'Content-Type': 'application/json', 'Authorization': token});
 
     test.testDataInit().then((_) {
       setState(() {
@@ -46,6 +58,7 @@ class _HistoryState extends State<History> {
             Container(
                 margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                       height: MediaQuery.of(context).size.width / 2,
@@ -112,7 +125,11 @@ class _HistoryState extends State<History> {
                         ],
                       ),
                     ),
-                    Text('\n')
+                    Text('\n'),
+                    Container(
+                        margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                        child: const Text('기록',
+                            style: TextStyle(color: Colors.grey)))
                   ],
                 )),
             isHistoriesInitialized
@@ -138,10 +155,35 @@ class _HistoryState extends State<History> {
                               child: Card(
                                 color: Colors.white,
                                 child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text(
-                                      '장소: ${histories[index].location}\n시간: ${histories[index].time}분\n거리: ${histories[index].distance}km\n주운 쓰레기: ${histories[index].trashCount}개'),
-                                ),
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          histories[index].location,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        Text(
+                                          '\n${DateFormat('yyyy년 MM월 dd일 ').format(histories[index].createdAt)}'
+                                          '${DateFormat.E('ko_KR').format(histories[index].createdAt)}요일',
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            // fontSize: 20,
+                                            // fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                    // Text(
+
+                                    //     '장소: ${histories[index].location}\n시간: ${histories[index].time}분\n거리: ${histories[index].distance}km\n주운 쓰레기: ${histories[index].trashCount}개'),
+                                    ),
                               ),
                             ),
                           );
