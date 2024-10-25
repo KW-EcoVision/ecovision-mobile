@@ -1,5 +1,9 @@
 import 'package:eco_vision/model/HistoryData.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
+import 'package:eco_vision/view/page/MainFrame.dart';
+import 'package:eco_vision/view/page/history/HistoryPage.dart';
+import 'package:eco_vision/view/widget/EcoAlertDialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -22,6 +26,35 @@ class _HistoryDetailPageState extends State<HistoryDetailPage> {
           '플로깅 기록',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showCupertinoDialog(
+                    context: context,
+                    builder: (context) {
+                      return EcoAlertDialog(
+                        title: '플로깅 기록을 삭제하시겠습니까?',
+                        content: '해당 플로깅에 대한 데이터가 삭제되며 다시 복구할 수 없습니다.',
+                        acceptFunction: () {
+                          // Navigator.of(context).pop();
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => const MainFrame(
+                                        index: 2,
+                                      )),
+                              (route) => false);
+                        },
+                        cancelFunction: () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    });
+              },
+              icon: const Icon(
+                Icons.delete_outline_outlined,
+                color: Colors.red,
+              ))
+        ],
       ),
       body: SafeArea(
         child: Container(
@@ -90,10 +123,10 @@ class _HistoryDetailPageState extends State<HistoryDetailPage> {
                   ),
                 ],
               ),
-              Text('\n'),
+              const Text('\n'),
               SizedBox(
                 height: MediaQuery.of(context).size.width - 20,
-                child: Card(
+                child: const Card(
                   color: Colors.white,
                   child: Center(child: Text('뭐 넣지?')),
                 ),
