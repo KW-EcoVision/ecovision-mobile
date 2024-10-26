@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
         backgroundColor: EcoVisionColor.mainGreen,
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PostWritePage()));
+              MaterialPageRoute(builder: (context) => const PostWritePage()));
         },
         child: const Icon(
           Icons.edit_note_outlined,
