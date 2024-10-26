@@ -39,10 +39,13 @@ class _PostViewPageState extends State<PostViewPage> {
     String createdAt = DateFormat.yMMMd().format(widget.postData.createdAt);
     String location = widget.postData.location;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: EcoVisionColor.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text('게시글'),
+        backgroundColor: EcoVisionColor.background,
+        title: const Text(
+          '게시글',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: SafeArea(
         child: Stack(
@@ -105,6 +108,9 @@ class _PostViewPageState extends State<PostViewPage> {
                                   child: CircularProgressIndicator(),
                                 ),
                         ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 11,
+                        )
                       ],
                     ),
                   ],
@@ -117,7 +123,7 @@ class _PostViewPageState extends State<PostViewPage> {
               bottom: 0,
               child: Container(
                 color: Colors.white,
-                padding: EdgeInsets.fromLTRB(13, 0, 13, 0),
+                padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
                 child: EcoTextField(
                     labelText: '댓글을 입력하세요',
                     width: MediaQuery.of(context).size.width - 26,
