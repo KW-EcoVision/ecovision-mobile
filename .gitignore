@@ -9,8 +9,6 @@
 .history
 .svn/
 migrate_working_dir/
-ios/
-android/
 
 # IntelliJ related
 *.iml
@@ -19,8 +17,6 @@ android/
 .idea/
 .vscode
 .DS_Store
-ios/
-android/
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -38,22 +34,16 @@ android/
 /build/
 .vscode
 .DS_Store
-ios/
-android/
 
 # Symbolication related
 app.*.symbols
 .vscode
 .DS_Store
-ios/
-android/
 
 # Obfuscation related
 app.*.map.json
 .vscode
 .DS_Store
-ios/
-android/
 
 # Android Studio will place build artifacts here
 /android/app/debug
@@ -61,5 +51,3 @@ android/
 /android/app/release
 .vscode
 .DS_Store
-ios/
-android/
