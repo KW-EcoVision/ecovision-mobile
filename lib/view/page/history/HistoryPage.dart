@@ -64,7 +64,7 @@ class _HistoryState extends State<History> {
                       height: MediaQuery.of(context).size.width / 2,
                       child: Card(
                         color: Colors.white,
-                        child: Center(child: Text('아바타 그림?')),
+                        child: Center(child: Text('아바타 그림')),
                       ),
                     ),
                     Container(

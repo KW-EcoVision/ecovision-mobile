@@ -274,7 +274,7 @@ class _PloggingBottomSheetState extends State<PloggingBottomSheet> {
                             return CupertinoAlertDialog(
                               title: const Text('도움말'),
                               content: const Text(
-                                  '\"카메라 버튼\"을 눌러 습득한 쓰레기를 촬영하면 쓰레기 카운트가 증가합니다.'),
+                                  '"카메라 버튼"을 눌러 습득한 쓰레기를 촬영하면 쓰레기 카운트가 증가합니다.'),
                               actions: [
                                 CupertinoDialogAction(
                                   isDefaultAction: true,

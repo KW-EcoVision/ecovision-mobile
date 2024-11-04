@@ -34,7 +34,7 @@ class _ActivityState extends State<Activity> {
     longitude = locationData.longitude;
 
     String gpsUrl =
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=apikey&language=ko';
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyCKfZGFg5T_navedR5Lj3icI34bNXH_bbw&language=ko';
     final responseGps = await http.get(Uri.parse(gpsUrl));
     Map<String, dynamic> result = jsonDecode(responseGps.body);
     String address = result['results'][0]['formatted_address'];

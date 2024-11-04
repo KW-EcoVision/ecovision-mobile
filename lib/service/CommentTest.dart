@@ -13,7 +13,7 @@ class CommentTest {
 
     while (i <= randomLength) {
       String randomWriter = "박에코";
-      String randomContent = "싫어요 안 나갈래요ㅋ";
+      String randomContent = "몇시까지 가면 되나요?";
 
       DateTime randomCreatedAt = DateTime.now();
 
