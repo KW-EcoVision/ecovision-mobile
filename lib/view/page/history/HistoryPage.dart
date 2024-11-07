@@ -24,7 +24,7 @@ class _HistoryState extends State<History> {
   HistoryTest test = HistoryTest();
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     // // test대신 기록 받아오는 api 넣기
     // prefs = await SharedPreferences.getInstance();
@@ -60,11 +60,11 @@ class _HistoryState extends State<History> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.width / 2,
-                      child: Card(
-                        color: Colors.white,
-                        child: Center(child: Text('아바타 그림')),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                      child: ClipRRect(
+                        child: Image.asset('assets/images/avatar/4.png'),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
                     Container(
