@@ -7,6 +7,9 @@ import 'package:eco_vision/view/widget/EcoAlertDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Setting extends StatefulWidget {
   const Setting({super.key});
 
@@ -15,6 +18,19 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
+  Future<void> exit() async {
+    late String token;
+    late SharedPreferences prefs;
+
+    prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('accessToken')!;
+
+    await http.delete(
+      Uri.parse("http://43.201.1.7:8080/delete"),
+      headers: {'Content-Type': 'application/json', 'Authorization': token},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,11 +130,13 @@ class _SettingState extends State<Setting> {
                                   title: '계정을 삭제하시겠습니까?',
                                   content: '당신의 모든 데이터가 삭제되며 다시 복구할 수 없습니다.',
                                   acceptFunction: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const LoginPage()),
-                                        (route) => false);
+                                    exit().then((_) {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const LoginPage()),
+                                          (route) => false);
+                                    });
                                   },
                                   cancelFunction: () {
                                     Navigator.pop(context);
