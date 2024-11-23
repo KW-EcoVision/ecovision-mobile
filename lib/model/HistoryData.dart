@@ -1,4 +1,5 @@
 class HistoryData {
+  late int id;
   late String location;
   late int time;
   late int distance;
@@ -6,7 +7,8 @@ class HistoryData {
   late DateTime createdAt;
 
   HistoryData(
-      {required this.location,
+      {required this.id,
+      required this.location,
       required this.time,
       required this.distance,
       required this.trashCount,
