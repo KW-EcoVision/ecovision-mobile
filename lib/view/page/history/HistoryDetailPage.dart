@@ -1,21 +1,57 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:camera/camera.dart';
 import 'package:eco_vision/model/HistoryData.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
-import 'package:eco_vision/view/page/MainFrame.dart';
-import 'package:eco_vision/view/page/history/HistoryPage.dart';
-import 'package:eco_vision/view/widget/EcoAlertDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HistoryDetailPage extends StatefulWidget {
   final HistoryData historyData;
-  const HistoryDetailPage({super.key, required this.historyData});
+  final int level;
+  const HistoryDetailPage(
+      {super.key, required this.historyData, required this.level});
 
   @override
   State<HistoryDetailPage> createState() => _HistoryDetailPageState();
 }
 
 class _HistoryDetailPageState extends State<HistoryDetailPage> {
+  ScreenshotController screenshotController = ScreenshotController();
+  Future<XFile> share() async {
+    return screenshotController
+        .capture(delay: const Duration(milliseconds: 10))
+        .then((onValue) async {
+      if (onValue == null) {
+        print("null!");
+      }
+      var buffer = onValue?.buffer;
+      ByteData byteData = ByteData.view(buffer!);
+      File file = await File('img.jpg').writeAsBytes(
+          buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+      return XFile(file.path);
+    });
+  }
+
+  Future<dynamic> ShowCapturedWidget(
+      BuildContext context, Uint8List capturedImage) {
+    return showDialog(
+      useSafeArea: false,
+      context: context,
+      builder: (context) => Scaffold(
+        appBar: AppBar(
+          title: Text("Captured widget screenshot"),
+        ),
+        body: Center(child: Image.memory(capturedImage)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,110 +64,106 @@ class _HistoryDetailPageState extends State<HistoryDetailPage> {
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                showCupertinoDialog(
-                    context: context,
-                    builder: (context) {
-                      return EcoAlertDialog(
-                        title: '플로깅 기록을 삭제하시겠습니까?',
-                        content: '해당 플로깅에 대한 데이터가 삭제되며 다시 복구할 수 없습니다.',
-                        acceptFunction: () {
-                          // Navigator.of(context).pop();
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => const MainFrame(
-                                        index: 2,
-                                      )),
-                              (route) => false);
-                        },
-                        cancelFunction: () {
-                          Navigator.pop(context);
-                        },
-                      );
-                    });
+              onPressed: () async {
+                screenshotController
+                    .capture(delay: Duration(milliseconds: 10))
+                    .then((capturedImage) async {
+                  Image.memory(capturedImage!);
+                  XFile image = XFile.fromData(capturedImage,
+                      name: 'record.jpg', mimeType: 'image/jpeg');
+                  await Share.shareXFiles([image]);
+                }).catchError((onError) {
+                  print(onError);
+                });
               },
               icon: const Icon(
-                Icons.delete_outline_outlined,
-                color: Colors.red,
+                Icons.ios_share_outlined,
+                color: Colors.black,
               ))
         ],
       ),
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                widget.historyData.location,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              Text(
-                '${DateFormat.yMMMd().format(widget.historyData.createdAt)}\n',
-                style: const TextStyle(color: Colors.grey),
-              ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                      child: Text(
-                    '\n거리\n',
-                    style: TextStyle(color: Colors.grey),
-                  )),
-                  Expanded(
-                      child: Text(
-                    '\n시간\n',
-                    style: TextStyle(color: Colors.grey),
-                  )),
-                  Expanded(
-                      child: Text(
-                    '\n주운 쓰레기\n',
-                    style: TextStyle(color: Colors.grey),
-                  )),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        '${widget.historyData.distance}m',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w900),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        '${widget.historyData.time}분',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w900),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        '${widget.historyData.trashCount}개',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w900),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const Text('\n'),
-              SizedBox(
-                height: MediaQuery.of(context).size.width - 20,
-                child: const Card(
-                  color: Colors.white,
-                  child: Center(child: Text('뭐 넣지?')),
+        child: Screenshot(
+          controller: screenshotController,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  widget.historyData.location,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-              ),
-            ],
+                Text(
+                  '${DateFormat.yMMMd().format(widget.historyData.createdAt)}\n',
+                  style: const TextStyle(color: Colors.grey),
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                        child: Text(
+                      '\n거리\n',
+                      style: TextStyle(color: Colors.grey),
+                    )),
+                    Expanded(
+                        child: Text(
+                      '\n시간\n',
+                      style: TextStyle(color: Colors.grey),
+                    )),
+                    Expanded(
+                        child: Text(
+                      '\n주운 쓰레기\n',
+                      style: TextStyle(color: Colors.grey),
+                    )),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          '${widget.historyData.distance}m',
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          '${widget.historyData.time}분',
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          '${widget.historyData.trashCount}개',
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Text('\n'),
+                SizedBox(
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.asset(
+                          'assets/images/avatar/${widget.level}.png'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
