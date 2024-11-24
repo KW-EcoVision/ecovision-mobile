@@ -10,6 +10,7 @@ class EcoTextField extends StatefulWidget {
   final Icon? prefixIcon;
   final Widget? suffix;
   final void Function(String)? onChanged;
+  final void Function(String)? onSubmitted;
   final String? labelText;
   final int? maxLine;
 
@@ -24,6 +25,7 @@ class EcoTextField extends StatefulWidget {
       this.prefixIcon,
       this.suffix,
       this.onChanged,
+      this.onSubmitted,
       this.labelText,
       this.maxLine});
 
@@ -63,6 +65,7 @@ class _EcoTextFeildState extends State<EcoTextField> {
             ),
           ),
           onChanged: widget.onChanged,
+          onSubmitted: widget.onSubmitted,
         ),
       ),
     );
