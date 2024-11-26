@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
+import 'package:eco_vision/view/page/MainFrame.dart';
 import 'package:eco_vision/view/widget/EcoTextField.dart';
 import 'package:flutter/material.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class PostWritePage extends StatefulWidget {
   const PostWritePage({super.key});
@@ -10,6 +16,21 @@ class PostWritePage extends StatefulWidget {
 }
 
 class _PostWritePageState extends State<PostWritePage> {
+  String tempTitle = '';
+  String tempContent = '';
+
+  Future<void> createComment(String title, String content) async {
+    late String token;
+    late SharedPreferences prefs;
+
+    prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('accessToken')!;
+
+    await http.post(Uri.parse("http://43.201.1.7:8080/board/post"),
+        headers: {'Content-Type': 'application/json', 'Authorization': token},
+        body: json.encode({"title": title, "content": content}));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +41,16 @@ class _PostWritePageState extends State<PostWritePage> {
         actions: [
           TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                if (tempContent.isNotEmpty && tempTitle.isNotEmpty) {
+                  createComment(tempTitle, tempContent).then((_) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const MainFrame(
+                                  index: 0,
+                                )),
+                        (route) => false);
+                  });
+                }
               },
               child: Text('확인'))
         ],
@@ -39,7 +69,9 @@ class _PostWritePageState extends State<PostWritePage> {
                 radius: 10,
                 isPassword: false,
                 onChanged: (value) {
-                  setState(() {});
+                  setState(() {
+                    tempTitle = value;
+                  });
                 }),
             EcoTextField(
                 labelText: '내용을 입력하세요',
@@ -51,7 +83,9 @@ class _PostWritePageState extends State<PostWritePage> {
                 radius: 10,
                 isPassword: false,
                 onChanged: (value) {
-                  setState(() {});
+                  setState(() {
+                    tempContent = value;
+                  });
                 }),
           ],
         ),
