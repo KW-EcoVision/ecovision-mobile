@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:camera/camera.dart';
+// import 'package:eco_vision/model/CreatePloggingData.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
 import 'package:eco_vision/view/page/activity/CameraPage.dart';
 import 'package:eco_vision/view/page/MainFrame.dart';
@@ -9,10 +11,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:http/http.dart' as http;
 
 class PloggingBottomSheet extends StatefulWidget {
-  const PloggingBottomSheet({super.key});
+  final String currentLocation;
+  const PloggingBottomSheet({super.key, required this.currentLocation});
 
   @override
   State<PloggingBottomSheet> createState() => _PloggingBottomSheetState();
@@ -38,6 +43,11 @@ class _PloggingBottomSheetState extends State<PloggingBottomSheet> {
   double lastLatitude = 0;
   double lastLongitude = 0;
   double distanceStack = 0;
+
+  late int recordTime;
+  late int recordDistance;
+  // late String recordLocation;
+  int recordTrashCount = 0;
 
   Future<void> initCamera() async {
     descriptions = await availableCameras();
@@ -75,11 +85,35 @@ class _PloggingBottomSheetState extends State<PloggingBottomSheet> {
 
       setState(() {
         distanceStack += interval / 1000;
+        recordDistance = (distanceStack * 1000).toInt(); // 미터단위
         lastLatitude;
         lastLongitude;
         currentSpeed = position.speed * 3.6; // 속도 업데이트
       });
     });
+  }
+
+  Future<void> createPloggingRecord() async {
+    late String token;
+    late SharedPreferences prefs;
+
+    prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('accessToken')!;
+
+    // CreatePloggingData createPloggingData = CreatePloggingData(
+    //     distance: recordDistance,
+    //     trashCount: recordTrashCount,
+    //     location: widget.currentLocation,
+    //     time: recordTime);
+
+    await http.post(Uri.parse("http://43.201.1.7:8080/plogging/record"),
+        headers: {'Content-Type': 'application/json', 'Authorization': token},
+        body: json.encode({
+          "distance": recordDistance,
+          "trashCount": recordTrashCount,
+          "location": widget.currentLocation,
+          "time": recordTime
+        }));
   }
 
   @override
@@ -119,6 +153,7 @@ class _PloggingBottomSheetState extends State<PloggingBottomSheet> {
                         stream: stopWatchTimer.rawTime,
                         builder: (context, snap) {
                           final int value = (snap.hasData) ? snap.data! : 0;
+                          recordTime = value ~/ 60000; // 분단위
                           final String displayTime = (value < 3600000)
                               ? StopWatchTimer.getDisplayTime(value,
                                   hours: false, milliSecond: false)
@@ -150,7 +185,7 @@ class _PloggingBottomSheetState extends State<PloggingBottomSheet> {
                       child: Column(
                     children: [
                       Text(
-                        '0',
+                        '$recordTrashCount',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: MediaQuery.of(context).size.height / 24,
@@ -213,13 +248,20 @@ class _PloggingBottomSheetState extends State<PloggingBottomSheet> {
                     onPressed: () async {
                       await initCamera();
                       if (isCameraInitialized) {
-                        Navigator.push(
+                        int? trashCount = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                CameraPage(cameraController: cameraController),
+                            builder: (context) => CameraPage(
+                              cameraController: cameraController,
+                              cameraDescriptions: descriptions,
+                            ),
                           ),
                         );
+                        if (trashCount != null) {
+                          setState(() {
+                            recordTrashCount += trashCount;
+                          });
+                        }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -253,10 +295,10 @@ class _PloggingBottomSheetState extends State<PloggingBottomSheet> {
                               acceptFunction: () {
                                 stopWatchTimer.onStopTimer();
                                 Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const MainFrame()),
-                                    (route) => false);
+                                    MaterialPageRoute(builder: (context) {
+                                  createPloggingRecord();
+                                  return const MainFrame();
+                                }), (route) => false);
                               },
                               cancelFunction: () {
                                 Navigator.pop(context);
