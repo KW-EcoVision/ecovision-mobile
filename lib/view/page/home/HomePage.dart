@@ -23,9 +23,9 @@ class _HomeState extends State<Home> {
     super.initState();
     // test대신 기록 받아오는 api 넣기
 
-    test.PostDataInit().then((_) {
+    test.postDataInit().then((posts) {
       setState(() {
-        posts = test.getPosts();
+        this.posts = posts;
         isHistoriesInitialized = true;
       });
     });
@@ -45,50 +45,60 @@ class _HomeState extends State<Home> {
       body: SafeArea(
         child: isHistoriesInitialized
             ? posts.isNotEmpty
-                ? ListView.builder(
-                    itemCount: posts.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                        width: MediaQuery.of(context).size.width - 20,
-                        child: InkWell(
-                          splashColor: Colors.transparent,
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PostViewPage(
-                                          postData: posts[index],
-                                        )));
-                          },
-                          child: Card(
-                            color: Colors.white,
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    posts[index].title,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                ? RefreshIndicator(
+                    onRefresh: () async {
+                      test.postDataInit().then((posts) {
+                        setState(() {
+                          this.posts = posts;
+                          isHistoriesInitialized = true;
+                        });
+                      });
+                    },
+                    child: ListView.builder(
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                          width: MediaQuery.of(context).size.width - 20,
+                          child: InkWell(
+                            splashColor: Colors.transparent,
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PostViewPage(
+                                            postData: posts[index],
+                                          )));
+                            },
+                            child: Card(
+                              color: Colors.white,
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      posts[index].title,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Text(
+                                      posts[index].content,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                  Text(
-                                    posts[index].content,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                      '${posts[index].writer}\n${DateFormat.yMMMd().format(posts[index].createdAt)} | ${posts[index].location}'),
-                                ],
+                                    Text(
+                                        '${posts[index].writer}\n${DateFormat.yMMMd().format(posts[index].createdAt)} | ${DateFormat.Hm().format(posts[index].createdAt)}'),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   )
                 : const Center(
                     child: Text('게시글이 없습니다.'),
