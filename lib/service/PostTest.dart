@@ -1,36 +1,42 @@
-import 'dart:math';
+import 'dart:convert';
 
 import 'package:eco_vision/model/PostData.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class PostTest {
-  int randomLength = Random().nextInt(10);
+  late String token;
+  late SharedPreferences prefs;
   late List<PostData> posts = [];
 
-  Future<void> PostDataInit() async {
+  Future<List<PostData>> postDataInit() async {
+    prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('accessToken')!;
+
+    http.Response response = await http.get(
+        Uri.parse("http://43.201.1.7:8080/board"),
+        headers: {'Content-Type': 'application/json', 'Authorization': token});
+
     posts = [];
-    int randomLength = Random().nextInt(10);
-    int i = 0;
+    if (response.statusCode == 200) {
+      int i = 0;
 
-    while (i <= randomLength) {
-      String randomWriter = "김에코";
-      String randomTitle = "오늘 8시에 같이 플로깅 하실분!";
-      String randomContent = "오늘 저녁 8시에 우이천에서 같이 플로깅하실 분 구해요!";
+      List dto = jsonDecode(utf8.decode(response.bodyBytes));
 
-      DateTime randomCreatedAt = DateTime.now();
-      String randomLocation = "서울시 노원구";
+      while (i < dto.length) {
+        PostData data = PostData(
+          id: dto[i]["id"],
+          title: dto[i]["title"],
+          content: dto[i]["content"],
+          writer: dto[i]["name"],
+          createdAt: DateTime.parse(dto[i]["write_time"]),
+        );
 
-      PostData data = PostData(
-        title: randomTitle,
-        content: randomContent,
-        writer: randomWriter,
-        location: randomLocation,
-        createdAt: randomCreatedAt,
-      );
-
-      posts.add(data);
-      i++;
+        posts.add(data);
+        i++;
+      }
     }
-    await Future.delayed(const Duration(seconds: 1)); // 테스트용 2초 딜레이
+    return posts;
   }
 
   List<PostData> getPosts() {
