@@ -34,16 +34,13 @@ class _ActivityState extends State<Activity> {
     longitude = locationData.longitude;
 
     String gpsUrl =
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyCKfZGFg5T_navedR5Lj3icI34bNXH_bbw&language=ko';
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=apikey&language=ko';
     final responseGps = await http.get(Uri.parse(gpsUrl));
     Map<String, dynamic> result = jsonDecode(responseGps.body);
-    String address = result['results'][0]['formatted_address'];
+    String address = result['results'][1]['formatted_address'];
     currentLocation = (address.split(' ').length < 4)
         ? address.split(' ').sublist(1, address.split(' ').length).join(' ')
-        : address
-            .split(' ')
-            .sublist(1, address.split(' ').length - 2)
-            .join(' ');
+        : address.split(' ').sublist(1, 4).join(' ');
   }
 
   @override
@@ -106,7 +103,7 @@ class _ActivityState extends State<Activity> {
                 enableDrag: false,
                 context: context,
                 builder: (context) {
-                  return const PloggingBottomSheet();
+                  return PloggingBottomSheet(currentLocation: currentLocation);
                 });
           },
         ),
