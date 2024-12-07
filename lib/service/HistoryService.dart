@@ -6,11 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
 
-class HistoryTest {
+class HistoryService {
   late String token;
   late SharedPreferences prefs;
-  // late Future<http.Response> response;
-  // int randomLength = Random().nextInt(10);
   late TotalData totaldata;
   late List<HistoryData> histories = [];
 
@@ -61,10 +59,6 @@ class HistoryTest {
       }
     }
     return histories;
-
-    // int randomLength = Random().nextInt(10);
-
-    // await Future.delayed(const Duration(seconds: 1)); // 테스트용 2초 딜레이
   }
 
   List<HistoryData> getHistories() {
