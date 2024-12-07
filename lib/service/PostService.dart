@@ -4,7 +4,7 @@ import 'package:eco_vision/model/PostData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class PostTest {
+class PostService {
   late String token;
   late SharedPreferences prefs;
   late List<PostData> posts = [];
