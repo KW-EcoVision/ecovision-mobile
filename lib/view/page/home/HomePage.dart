@@ -1,5 +1,5 @@
 import 'package:eco_vision/model/PostData.dart';
-import 'package:eco_vision/service/PostTest.dart';
+import 'package:eco_vision/service/PostService.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
 import 'package:eco_vision/view/page/home/PostViewPage.dart';
 import 'package:eco_vision/view/page/home/PostWritePage.dart';
@@ -16,14 +16,14 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool isHistoriesInitialized = false;
   late List<PostData> posts;
-  PostTest test = PostTest();
+  PostService service = PostService();
 
   @override
   void initState() {
     super.initState();
     // test대신 기록 받아오는 api 넣기
 
-    test.postDataInit().then((posts) {
+    service.postDataInit().then((posts) {
       setState(() {
         this.posts = posts;
         isHistoriesInitialized = true;
@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
             ? posts.isNotEmpty
                 ? RefreshIndicator(
                     onRefresh: () async {
-                      test.postDataInit().then((posts) {
+                      service.postDataInit().then((posts) {
                         setState(() {
                           this.posts = posts;
                           isHistoriesInitialized = true;
