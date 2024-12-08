@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eco_vision/model/CommentData.dart';
 import 'package:eco_vision/model/PostData.dart';
-import 'package:eco_vision/service/CommentTest.dart';
+import 'package:eco_vision/service/CommentService.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
 import 'package:eco_vision/view/widget/EcoTextField.dart';
 import 'package:flutter/material.dart';
@@ -21,13 +21,13 @@ class PostViewPage extends StatefulWidget {
 class _PostViewPageState extends State<PostViewPage> {
   bool isCommentsInitialized = false;
   late List<CommentData> comments;
-  CommentTest test = CommentTest();
+  CommentService service = CommentService();
   String tempComment = '';
   @override
   void initState() {
     super.initState();
 
-    test.CommentDataInit(widget.postData.id).then((comments) {
+    service.CommentDataInit(widget.postData.id).then((comments) {
       setState(() {
         this.comments = comments;
         isCommentsInitialized = true;
@@ -113,8 +113,8 @@ class _PostViewPageState extends State<PostViewPage> {
                                               ),
                                               Text(comments[index].content),
                                               Text(
-                                                "${DateFormat.yMMMd().format(comments[index].createdAt)} | ${DateFormat.Hm().format(comments[index].createdAt)}" +
-                                                    "\n",
+                                                "${DateFormat.yMMMd().format(comments[index].createdAt)} | ${DateFormat.Hm().format(comments[index].createdAt)}"
+                                                "\n",
                                                 style: const TextStyle(
                                                     color: Colors.grey),
                                               ),
@@ -147,7 +147,7 @@ class _PostViewPageState extends State<PostViewPage> {
                     children: [
                       Container(
                         color: Colors.white,
-                        padding: EdgeInsets.fromLTRB(13, 0, 13, 0),
+                        padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
                         child: EcoTextField(
                           labelText: '댓글을 입력하세요',
                           width: MediaQuery.of(context).size.width - 26,
@@ -164,7 +164,7 @@ class _PostViewPageState extends State<PostViewPage> {
                           onSubmitted: (value) {
                             if (tempComment.isNotEmpty) {
                               createComment(tempComment).then((_) {
-                                test.CommentDataInit(widget.postData.id)
+                                service.CommentDataInit(widget.postData.id)
                                     .then((comments) {
                                   setState(() {
                                     this.comments = comments;

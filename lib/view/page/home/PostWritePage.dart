@@ -37,7 +37,7 @@ class _PostWritePageState extends State<PostWritePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('게시글 작성'),
+        title: const Text('게시글 작성'),
         actions: [
           TextButton(
               onPressed: () {
@@ -52,7 +52,7 @@ class _PostWritePageState extends State<PostWritePage> {
                   });
                 }
               },
-              child: Text('확인'))
+              child: const Text('확인'))
         ],
       ),
       body: SafeArea(
