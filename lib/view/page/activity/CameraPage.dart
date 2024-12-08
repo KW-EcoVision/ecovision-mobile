@@ -32,7 +32,6 @@ class _CameraPageState extends State<CameraPage> {
     dio.options.contentType = 'multipart/form-data';
     var response =
         await dio.post("http://100.102.151.106:5000/detect", data: formData);
-    print(response.data);
     return response.data;
   }
 
