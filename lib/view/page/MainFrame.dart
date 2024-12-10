@@ -24,7 +24,6 @@ class _MainFrameState extends State<MainFrame> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.index != null) {
       currentIndex = widget.index!;
