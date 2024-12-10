@@ -1,6 +1,6 @@
 import 'package:eco_vision/model/HistoryData.dart';
 import 'package:eco_vision/model/TotalData.dart';
-import 'package:eco_vision/service/HistoryTest.dart';
+import 'package:eco_vision/service/HistoryService.dart';
 import 'package:eco_vision/view/const/EcoVisionColor.dart';
 import 'package:eco_vision/view/page/history/HistoryDetailPage.dart';
 import 'package:flutter/material.dart';
@@ -20,15 +20,15 @@ class _HistoryState extends State<History> {
   late TotalData totalData;
   late String token;
   late SharedPreferences prefs;
-  HistoryTest test = HistoryTest();
+  HistoryService service = HistoryService();
 
   @override
   void initState() {
     super.initState();
-    test.testDataInit().then((_) {
+    service.testDataInit().then((_) {
       setState(() {
-        histories = test.getHistories();
-        totalData = test.getTotalData();
+        histories = service.getHistories();
+        totalData = service.getTotalData();
         isHistoriesInitialized = true;
       });
     });
@@ -57,10 +57,9 @@ class _HistoryState extends State<History> {
                           Container(
                             margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                             child: ClipRRect(
-                              child: Image.asset('assets/images/avatar/' +
-                                  totalData.level.toString() +
-                                  '.png'),
                               borderRadius: BorderRadius.circular(10.0),
+                              child: Image.asset(
+                                  'assets/images/avatar/${totalData.level}.png'),
                             ),
                           ),
                           Container(

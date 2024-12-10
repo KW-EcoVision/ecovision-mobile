@@ -92,7 +92,6 @@ class _SettingState extends State<Setting> {
                                         const ServiceTermPage()));
                           },
                         ),
-                        // Divider(),
                         ListTile(
                           title: const Text(
                             '로그아웃',
@@ -110,7 +109,6 @@ class _SettingState extends State<Setting> {
               Container(
                 margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                 width: MediaQuery.of(context).size.width - 20,
-                // height: MediaQuery.of(context).size.width / 3 - 32,
                 child: Card(
                   color: Colors.white,
                   child: ListView(

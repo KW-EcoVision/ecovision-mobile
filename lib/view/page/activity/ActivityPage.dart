@@ -74,7 +74,7 @@ class _ActivityState extends State<Activity> {
       body: SafeArea(
         child: Center(
           child: !isLocationInitialized
-              ? const CircularProgressIndicator() // 위치 데이터가 준비되지 않은 경우 로딩 표시
+              ? const CircularProgressIndicator()
               : GoogleMap(
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
