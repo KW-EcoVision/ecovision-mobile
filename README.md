@@ -31,12 +31,15 @@
 
 ## Design
 
+<img width="1369" alt="스크린샷 2024-12-12 오전 8 58 22" src="https://github.com/user-attachments/assets/9f9d3ead-38fb-4b2d-99c0-2aa81357d823" />
 
 
 ## ERDiagram
 
-
+![ERd](https://github.com/user-attachments/assets/3ad45006-2e1a-49be-a90d-9a9542350254)
 
 ## Service Architecture
+
+<img width="620" alt="스크린샷 2024-12-12 오전 8 56 27" src="https://github.com/user-attachments/assets/1eaed10a-c87a-4be3-b64c-c89fc60139ce" />
 
 
