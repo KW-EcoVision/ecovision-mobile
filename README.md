@@ -9,7 +9,12 @@
 
 ## Member
 
-
+|                    name                    |          role           |
+| :----------------------------------------: | :---------------------: |
+|  [김민지](https://github.com/cakefeelsgood)  |          백엔드           |
+|  [박경민](https://github.com/Kyoung-M1N)  | 디자인, 앱 개발 |
+|  [박시언](https://github.com/simmonspark)   |     AI       |
+|  [황태현](https://github.com/hwangtaehyeon123)   |       백엔드       |
 
 ## Dev tools
 
